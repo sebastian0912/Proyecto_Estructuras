@@ -7,6 +7,7 @@ using namespace std;
 
 int main(int argc, char const *argv[])
 {
+    //Entrega 1 = Menu de opciones
     char opcion[50], delimitador[] = " ";
     vector<string> comandos;
     vector<string> archivo;
