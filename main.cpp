@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
 {
     char opcion[50], delimitador[] = " ";
     vector<string> comandos;    
-    vector<CodigosGeneticos> lista;    
+    list<CodigosGeneticos> lista;    
     int it = 0, cont = 0;
     bool bandera=false;
     bool centinela;
@@ -49,7 +49,16 @@ int main(int argc, char const *argv[])
                 comandos[1] = "archivosFASTA/" + comandos[1];
                 lista.clear();
                 guardar(lista, comandos[1]);    
-                centinela = true;            
+                centinela = true;      
+            /*for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+            {
+                cout << "   " << it->nombre_sec << endl;
+                for (list<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
+                {
+                    cout << *it2;
+                }
+                cout << endl;
+            }*/                
                 
             }
         }
@@ -68,6 +77,7 @@ int main(int argc, char const *argv[])
                 }
             }
         }
+
         else if (comandos[0] == "listar_secuencias")
         {
             if (comandos.size() > 1)
@@ -75,11 +85,14 @@ int main(int argc, char const *argv[])
                 cout << "listar_secuencias argumento no valido" << endl;
                 cout << "listar_secuencias " << endl;
             }
-            else if (comandos.size() == 1)
+            else 
             {
-                cout << "Lista de secuencias" << endl;
+                if (centinela == true){
+                    listarSecuencias(lista);
+                }
             }
         }
+
         else if (comandos[0] == "histograma")
         {
             if (comandos.size() > 2)
@@ -92,6 +105,7 @@ int main(int argc, char const *argv[])
                 cout << "Histograma realizado" << endl;
             }
         }
+
         else if (comandos[0] == "es_subsecuencia")
         {
             if (comandos.size() == 1)
@@ -104,6 +118,7 @@ int main(int argc, char const *argv[])
                 cout << "Subsecuencia realizado" << endl;
             }
         }
+
         else if (comandos[0] == "enmascarar")
         {
             if (comandos.size() == 1)
@@ -116,6 +131,7 @@ int main(int argc, char const *argv[])
                 cout << "Enmascarado realizado" << endl;
             }
         }
+
         else if (comandos[0] == "guardar")
         {
             if (comandos.size() == 1)
@@ -128,6 +144,7 @@ int main(int argc, char const *argv[])
                 cout << "Guardado realizado" << endl;
             }
         }
+
         else if (comandos[0] == "codificar")
         {
             if (comandos.size() == 1)
