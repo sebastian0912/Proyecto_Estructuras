@@ -18,6 +18,26 @@ struct CodigosGeneticos
 
 vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X'};
 
+int tamañomatriz(string nomnbreArhivoOld)
+{
+    char cadena[750];
+    ifstream fe(nomnbreArhivoOld);
+    int cont = 0;
+    while (!fe.eof())
+    {
+        if (fe >> cadena)
+        {
+            // comparar tamaños de cadenas para saber cual es el strlengt mas largo
+            if (strlen(cadena) > cont)
+            {
+                cont = strlen(cadena);
+            }
+        }
+    }
+    fe.close();
+    return cont;
+}
+
 void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
 {
     int cont = 0;
@@ -52,6 +72,7 @@ void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
                 aux.secuencia.clear();
                 aux.nombre_sec.clear();
             }
+            // eliminar ultimo elemento de la lista
             lista.pop_back();
             cout << lista.size() << "   secuencias cargadas" << endl;
         }
@@ -60,7 +81,6 @@ void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
             cout << nombre_archivo << "   no se encuentra o no puede leerse." << endl;
         }
     }
-    // eliminar ultimo elemento de la lista
 }
 
 void listarSecuenciaw(vector<char> cod, int &aux)
@@ -98,7 +118,7 @@ void listarSecuenciaw(vector<char> cod, int &aux)
     }
 }
 
-void listarSecuencias(list<CodigosGeneticos> &lista)
+void listarSecuencias(list<CodigosGeneticos> lista)
 {
     int cont = 0;
     // Cuantas veces cada codigo aparece en la secuencia por cada codigo genetico
@@ -131,7 +151,7 @@ void listarSecuencias(list<CodigosGeneticos> &lista)
     }
 }
 
-void histograma(string nombre_secuencia, list<CodigosGeneticos> &lista)
+void histograma(string nombre_secuencia, list<CodigosGeneticos> lista)
 {
     int cont = 0;
     for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
@@ -183,14 +203,10 @@ void cuantos(string sub, vector<char> &aux, int &cont2)
     }
 }
 
-void sub_secuencia(string sub, list<CodigosGeneticos> &lista)
+void sub_secuencia(string sub, list<CodigosGeneticos> lista)
 {
-    int cont = 0, aux = 0;
+    int cont = 0;
     // cout << sub << endl;
-    bool encontrado = false;
-    char cadena[MAX_LENGHT], cadena2[MAX_LENGHT];
-    strcpy(cadena, sub.c_str());
-    // cout << cadena << endl;
 
     for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
@@ -204,6 +220,67 @@ void sub_secuencia(string sub, list<CodigosGeneticos> &lista)
     cout << "La subsecuencia " << sub << " aparece " << cont << " veces" << endl;
 
     // es_subsecuencia CAACATCACCAATCA
+}
+
+void cambiarValorPorX(string sub, vector<char> &aux)
+{
+    char cadena[sub.size() + 1];
+    strcpy(cadena, sub.c_str());
+    // cout<<cadena<<endl;
+    for (int i = 0; i < sub.size(); i++)
+    {
+        for (int j = 0; j < aux.size(); j++)
+        {
+            if (cadena[i] == aux[j])
+            {
+                aux[j] = 'X';
+            }
+        }
+    }
+}
+
+void enmascarar(string sub, list<CodigosGeneticos> &lista)
+{
+    for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        vector<char>::iterator it2 = it->secuencia.begin();
+        cambiarValorPorX(sub, it->secuencia);
+    }
+    for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        vector<char>::iterator it2 = it->secuencia.begin();
+        cout << it->nombre_sec << endl;
+        for (int i = 0; i < it->secuencia.size(); i++)
+        {
+            cout << it->secuencia[i];
+        }
+        cout << endl;
+    }
+}
+
+void guardarEnArhivo(string nombreArchivo, list<CodigosGeneticos> &lista, int cont)
+{
+    ofstream archivo;
+    archivo.open(nombreArchivo);
+    if (archivo.fail())
+    {
+        cout << "No se pudo abrir el archivo" << endl;
+        exit(1);
+    }
+    else
+    {
+        for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+        {
+            archivo <<">"<< it->nombre_sec << endl;
+            for (int i = 0; i < it->secuencia.size(); i++)
+            {
+                archivo << it->secuencia[i];
+            }
+            archivo << endl;
+        }
+        archivo.close();
+        
+    }
 }
 
 #endif

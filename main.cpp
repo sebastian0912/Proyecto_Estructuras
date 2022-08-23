@@ -14,7 +14,8 @@ int main(int argc, char const *argv[])
     char opcion[50], delimitador[] = " ";
     vector<string> comandos;
     list<CodigosGeneticos> lista;
-    int it = 0, cont = 0;
+    int it = 0, cont;
+    string NombreArchivoOld;
     bool bandera = false;
     bool centinela;
     do
@@ -46,18 +47,19 @@ int main(int argc, char const *argv[])
             {
                 // Leer archivo cargar AligSeq85678-lin.fa
                 comandos[1] = "archivosFASTA/" + comandos[1];
+                NombreArchivoOld = comandos[1];
                 lista.clear();
                 guardar(lista, comandos[1]);
                 centinela = true;
-                /*for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+                for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
                 {
                     cout << "   " << it->nombre_sec << endl;
-                    for (list<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
+                    for (vector<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
                     {
                         cout << *it2;
                     }
                     cout << endl;
-                }*/
+                }
             }
         }
 
@@ -137,7 +139,13 @@ int main(int argc, char const *argv[])
             }
             else if (comandos.size() == 2)
             {
-                cout << "Enmascarado realizado" << endl;
+                if (centinela == true)
+                {  
+                    enmascarar(comandos[1], lista);
+                }
+                else{
+                    cout << "   no hay secuencias cargadas" << endl;
+                }                
             }
         }
 
@@ -149,8 +157,10 @@ int main(int argc, char const *argv[])
                 cout << "guardar nombre_archivo" << endl;
             }
             else if (comandos.size() == 2)
-            {
-                cout << "Guardado realizado" << endl;
+            {           
+                //cout <<NombreArchivoOld<<endl;     
+                tamañomatriz(NombreArchivoOld);
+                guardarEnArhivo(comandos[1], lista, cont);
             }
         }
 
