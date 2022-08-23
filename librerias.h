@@ -13,8 +13,10 @@ using namespace std;
 struct CodigosGeneticos
 {
     string nombre_sec;
-    list<char> secuencia;
+    vector<char> secuencia;
 };
+
+vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X'};
 
 void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
 {
@@ -38,7 +40,7 @@ void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
                 if (strstr(cadena, ">") != NULL)
                 {
                     aux.nombre_sec = cadena;
-                    // aux.nombre_sec.erase(0, 1);
+                    aux.nombre_sec.erase(0, 1);
                     memset(cadena, 0, sizeof(cadena));
                     fe >> cadena;
                     for (int i = 0; i < MAX_LENGHT; i++)
@@ -61,13 +63,13 @@ void guardar(list<CodigosGeneticos> &lista, string nombre_archivo)
     // eliminar ultimo elemento de la lista
 }
 
-void listarSecuenciaw(list<char> cod, int &aux, bool &centinela)
+void listarSecuenciaw(vector<char> cod, int &aux)
 {
     int cont = 0, cont2 = 0;
     vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};
     for (int i = 0; i < codigos.size(); i++)
     {
-        list<char>::iterator it = cod.begin();
+        vector<char>::iterator it = cod.begin();
         while (it != cod.end())
         {
             if (*it == codigos[i])
@@ -81,15 +83,15 @@ void listarSecuenciaw(list<char> cod, int &aux, bool &centinela)
             it++;
         }
 
-        if (cont != 0 && cont2 !=0 && codigos[i] != '-')
+        if (cont != 0 && cont2 != 0 && codigos[i] != '-')
         {
             aux -= cont;
-            cout << codigos[i] << " Contiene" << cont << "bases" << endl;            
+            cout << codigos[i] << " Contiene: " << cont << " bases" << endl;
         }
-        else if (cont != 0 && cont2==0 && codigos[i] != '-')
+        else if (cont != 0 && cont2 == 0 && codigos[i] != '-')
         {
             aux += cont;
-            cout << codigos[i] << " Contiene: " << cont << "bases" << endl;            
+            cout << codigos[i] << " Contiene: " << cont << " bases" << endl;
         }
         cont = 0;
         cont2 = 0;
@@ -98,14 +100,12 @@ void listarSecuenciaw(list<char> cod, int &aux, bool &centinela)
 
 void listarSecuencias(list<CodigosGeneticos> &lista)
 {
-    vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X'};
     int cont = 0;
-    bool centinela;
     // Cuantas veces cada codigo aparece en la secuencia por cada codigo genetico
     for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
 
-        list<char>::iterator it2 = it->secuencia.begin();
+        vector<char>::iterator it2 = it->secuencia.begin();
 
         // it2 vacio
         if (it2 == it->secuencia.end())
@@ -114,20 +114,96 @@ void listarSecuencias(list<CodigosGeneticos> &lista)
         }
         else
         {
-            centinela = false;
             cout << it->nombre_sec << endl;
-            listarSecuenciaw(it->secuencia, cont, centinela);
-            if (cont<1){
-                cout<< "Esta secuencia contiene al menos "<< cont*-1 <<" bases"<<endl;
+            listarSecuenciaw(it->secuencia, cont);
+            if (cont < 1)
+            {
+                cout << "Esta secuencia contiene al menos " << cont * -1 << " bases" << endl;
             }
-            else{
-                cout<< "Esta secuencia contiene "<< cont <<" bases"<<endl;
+            else
+            {
+                cout << "Esta secuencia contiene " << cont << " bases" << endl;
             }
             cont = 0;
         }
 
         system("pause");
     }
+}
+
+void histograma(string nombre_secuencia, list<CodigosGeneticos> &lista)
+{
+    int cont = 0;
+    for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        if (it->nombre_sec == nombre_secuencia)
+        {
+            vector<char>::iterator it2 = it->secuencia.begin();
+            if (it2 == it->secuencia.end())
+            {
+                cout << "La secuencia " << nombre_secuencia << " esta invalidada, no se encuentra" << endl;
+                break;
+            }
+            else
+            {
+                if (it->nombre_sec == nombre_secuencia)
+                {
+                    listarSecuenciaw(it->secuencia, cont);
+                }
+            }
+        }
+    }
+}
+
+void cuantos(string sub, vector<char> &aux, int &cont2)
+{
+    char cadena[MAX_LENGHT];
+    char subcadena[MAX_LENGHT];
+    char *busqueda = NULL;
+    strcpy(subcadena, sub.c_str());
+    // cout<<subcadena<<endl;
+    // copiar aux.secuencia a cadena
+    for (int i = 0; i < aux.size(); i++)
+    {
+        cadena[i] = aux[i];
+    } /*
+     for (int i=0; i< sizeof(cadena); i++)
+     {
+         cout<<cadena[i];
+     }    */
+    busqueda = strstr(cadena, subcadena);
+    if (busqueda == NULL)
+    {
+        cout << "La secuencia dada no existe." << endl;
+    }
+    while (busqueda != NULL)
+    {
+        cont2++;
+        busqueda = strstr(busqueda + 1, subcadena);
+    }
+}
+
+void sub_secuencia(string sub, list<CodigosGeneticos> &lista)
+{
+    int cont = 0, aux = 0;
+    // cout << sub << endl;
+    bool encontrado = false;
+    char cadena[MAX_LENGHT], cadena2[MAX_LENGHT];
+    strcpy(cadena, sub.c_str());
+    // cout << cadena << endl;
+
+    for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        // cout << "   " << it->nombre_sec << endl;
+        vector<char>::iterator it2 = it->secuencia.begin();
+        cuantos(sub, it->secuencia, cont);
+        // cout<<endl<<endl;
+    }
+    cout << endl
+         << endl;
+    cout << "La subsecuencia " << sub << " aparece " << cont << " veces" << endl;
+
+    // es_subsecuencia CAACATCACCAATCA
 }
 
 #endif
