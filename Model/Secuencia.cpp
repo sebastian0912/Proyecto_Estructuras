@@ -40,7 +40,6 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
                     lista.push_back(secuencia);
                     sec = "";
                     datos = "";
-                    cont = 0;
                 }
                 datos = str;
             }
@@ -65,7 +64,6 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
 
         lista.push_back(secuencia);
         sec = "";
-        aux=0;
     }
     else
     {
