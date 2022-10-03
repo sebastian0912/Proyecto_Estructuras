@@ -5,15 +5,16 @@
 #include <iomanip>
 #include <list>
 
-#include "librerias.h"
-// Hecho por Sebastian Guarnizo Campos, Maikol Alexander Vergara y Santiago Vides Salcedo
+#include "Model/Secuencia.cpp"
+
 using namespace std;
 
-int main(int argc, char const *argv[])
+int main()
 {
     char opcion[50], delimitador[] = " ";
-    vector<string> comandos;
-    list<CodigosGeneticos> lista;
+    vector<string> comandos;    
+    list <Secuencia> lista_secuencias;
+    Secuencia secuencia;
     int it = 0, cont;
     string NombreArchivoOld;
     bool bandera = false;
@@ -48,10 +49,13 @@ int main(int argc, char const *argv[])
                 // Leer archivo cargar AligSeq85678-lin.fa
                 comandos[1] = "archivosFASTA/" + comandos[1];
                 NombreArchivoOld = comandos[1];
-                lista.clear();
-                guardar(lista, comandos[1]);
+                lista_secuencias.clear();
+                
+                secuencia.guardar(lista_secuencias, comandos[1]);
+                
+                //guardar(lista, comandos[1]);
                 centinela = true;
-                for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
+                /*for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
                 {
                     cout << "   " << it->nombre_sec << endl;
                     for (vector<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
@@ -59,7 +63,7 @@ int main(int argc, char const *argv[])
                         cout << *it2;
                     }
                     cout << endl;
-                }
+                }*/
             }
         }
 
@@ -74,7 +78,7 @@ int main(int argc, char const *argv[])
             {
                 if (centinela == true)
                 {
-                    cout << lista.size() << " secuencias cargadas en memoria" << endl;
+                    cout << lista_secuencias.size() << " secuencias cargadas en memoria" << endl;
                 }
             }
         }
@@ -90,7 +94,7 @@ int main(int argc, char const *argv[])
             {
                 if (centinela == true)
                 {
-                    listarSecuencias(lista);
+                    //listarSecuencias(lista);
                 }
             }
         }
@@ -106,7 +110,7 @@ int main(int argc, char const *argv[])
             {
                 if (centinela == true)
                 {
-                    histograma(comandos[1], lista);
+                    //histograma(comandos[1], lista);
                 }
             }
         }
@@ -122,7 +126,7 @@ int main(int argc, char const *argv[])
             {
                 if (centinela == true)
                 {  
-                    sub_secuencia(comandos[1], lista);
+                    //sub_secuencia(comandos[1], lista);
                 }
                 else{
                     cout << "   no hay secuencias cargadas" << endl;
@@ -141,7 +145,7 @@ int main(int argc, char const *argv[])
             {
                 if (centinela == true)
                 {  
-                    enmascarar(comandos[1], lista);
+                    //enmascarar(comandos[1], lista);
                 }
                 else{
                     cout << "   no hay secuencias cargadas" << endl;
@@ -159,8 +163,8 @@ int main(int argc, char const *argv[])
             else if (comandos.size() == 2)
             {           
                 //cout <<NombreArchivoOld<<endl;     
-                tamañomatriz(NombreArchivoOld);
-                guardarEnArhivo(comandos[1], lista, cont);
+                //tamañomatriz(NombreArchivoOld);
+                //guardarEnArhivo(comandos[1], lista, cont);
             }
         }
 
@@ -244,6 +248,5 @@ int main(int argc, char const *argv[])
         }
         comandos.clear();
     } while (bandera == false);
-
-    exit(0);
+    return 0;
 }
