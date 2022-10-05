@@ -94,7 +94,7 @@ int main()
             {
                 if (centinela == true)
                 {
-                    //listarSecuencias(lista_secuencias);
+                    listarSecuencias(lista_secuencias);
                 }
             }
         }
@@ -110,7 +110,7 @@ int main()
             {
                 if (centinela == true)
                 {
-                    //histograma(comandos[1], lista);
+                    histograma(comandos[1], lista_secuencias);
                 }
             }
         }

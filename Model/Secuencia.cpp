@@ -149,11 +149,38 @@ void listarSecuencias(list<Secuencia> lista)
             }
             cont = 0;
         }
-        for (int i = 0; i < secuencias.size(); i++)
+        /*for (int i = 0; i < secuencias.size(); i++)
         {
             cout << secuencias[i];
-        }
+        }*/
         secuencias.clear();
         system("pause");
+    }
+}
+
+void histograma(string nombre_secuencia, list<Secuencia> lista)
+{
+    int cont = 0;
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        if (strstr (it->getNombre_sec().c_str() , nombre_secuencia.c_str()))
+        {
+            vector<char> secuencias;
+            for (int i = 0; i < it->getSecuencia().size(); i++)
+            {
+                secuencias.push_back(it->getSecuencia()[i]);
+            }
+            vector<char>::iterator it2 = secuencias.begin();
+            if (it == lista.end())
+            {
+                cout << "La secuencia " << nombre_secuencia << " esta invalidada, no se encuentra" << endl;
+                break;
+            }
+            else
+            {
+                cout << it->getNombre_sec() << endl;
+                listarSecuenciaw(secuencias, cont);
+            }
+        }
     }
 }
