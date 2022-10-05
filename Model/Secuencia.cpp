@@ -20,7 +20,6 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     string datos;
     ifstream fe(nombre_archivo);
     int cont = 0, aux = 0;
-
     // Comprobar si el archivo esta vacio y luego leeerlo
     if (fe.is_open())
     {
@@ -28,18 +27,22 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
         while (!fe.eof())
         {
             fe.getline(str, MAX_LENGHT);
-            Secuencia secuencia;
             if (str[0] == '>')
             {
-                Secuencia secuencia;
-                secuencia.setNombre_sec(datos);
-                secuencia.setSecuencia(sec);
-                secuencia.setTamano(cont);
-                lista.push_back(secuencia);
-                sec = "";
-                datos = "";
+                if (sec != "")
+                {
+                    Secuencia secuencia;
+                    secuencia.setNombre_sec(datos);
+                    secuencia.setSecuencia(sec);
+
+                    secuencia.setTamano(cont);
+
+                    lista.push_back(secuencia);
+                    sec = "";
+                    datos = "";
+                    cont = 0;
+                }
                 datos = str;
-                aux = 0;
             }
             else
             {
@@ -47,7 +50,7 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
                 if (aux == 0)
                 {
                     sec = str;
-                    cont = sec.size();
+                    cont = strlen(str);
                     aux++;
                 }
                 else
@@ -59,16 +62,15 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
         Secuencia secuencia;
         secuencia.setNombre_sec(datos);
         secuencia.setSecuencia(sec);
-        secuencia.setTamano(cont);
+
         lista.push_back(secuencia);
         sec = "";
+        aux=0;
     }
     else
     {
         cout << "No se pudo abrir el archivo" << endl;
     }
-    fe.close();
-    lista.pop_front();
     cout << "Secuencias guardadas" << endl;
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
@@ -79,8 +81,4 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     cout << "Tamaño de la lista: " << lista.size() << endl;
     fe.close();
 }
-
-
-
-
 
