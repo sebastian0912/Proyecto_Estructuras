@@ -126,7 +126,7 @@ int main()
             {
                 if (centinela == true)
                 {  
-                    //sub_secuencia(comandos[1], lista);
+                    sub_secuencia(comandos[1], lista_secuencias);
                 }
                 else{
                     cout << "   no hay secuencias cargadas" << endl;

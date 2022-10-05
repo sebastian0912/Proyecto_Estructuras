@@ -163,7 +163,7 @@ void histograma(string nombre_secuencia, list<Secuencia> lista)
     int cont = 0;
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
-        if (strstr (it->getNombre_sec().c_str() , nombre_secuencia.c_str()))
+        if (strstr(it->getNombre_sec().c_str(), nombre_secuencia.c_str()))
         {
             vector<char> secuencias;
             for (int i = 0; i < it->getSecuencia().size(); i++)
@@ -183,4 +183,59 @@ void histograma(string nombre_secuencia, list<Secuencia> lista)
             }
         }
     }
+}
+
+void cuantos(string sub, vector<char> aux, int &cont2)
+{
+    char cadena[MAX_LENGHT];
+    char subcadena[MAX_LENGHT];
+    char *busqueda = NULL;
+    strcpy(subcadena, sub.c_str());
+    // cout<<subcadena<<endl;
+    // copiar aux.secuencia a cadena
+    for (int i = 0; i < aux.size(); i++)
+    {
+        cadena[i] = aux[i];
+    } /*
+     for (int i=0; i< sizeof(cadena); i++)
+     {
+         cout<<cadena[i];
+     }    */
+    busqueda = strstr(cadena, subcadena);
+    if (busqueda == NULL)
+    {
+        cout << "La secuencia dada no existe." << endl;
+    }
+    while (busqueda != NULL)
+    {
+        cont2++;
+        busqueda = strstr(busqueda + 1, subcadena);
+    }
+}
+
+void sub_secuencia(string sub, list<Secuencia> lista)
+{
+    int cont = 0;
+    // cout << sub << endl;
+
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+
+        // cout << "   " << it->nombre_sec << endl;
+        vector<char> secuencias;
+        secuencias.clear();
+        for (int i = 0; i < it->getSecuencia().size(); i++)
+        {
+            secuencias.push_back(it->getSecuencia()[i]);
+        }
+        vector<char>::iterator it2 = secuencias.begin();
+        cuantos(sub, secuencias, cont);
+        secuencias.clear();
+        // cout<<endl<<endl;
+    }
+    cout << endl
+         << endl;
+    cout << "La subsecuencia " << sub << " aparece " << cont << " veces" << endl;
+
+    // es_subsecuencia CAACATCACCAATCA
 }
