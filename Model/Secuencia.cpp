@@ -29,19 +29,17 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
             fe.getline(str, MAX_LENGHT);
             if (str[0] == '>')
             {
-                if (sec != "")
-                {
-                    Secuencia secuencia;
-                    secuencia.setNombre_sec(datos);
-                    secuencia.setSecuencia(sec);
+                Secuencia secuencia;
+                secuencia.setNombre_sec(datos);
+                secuencia.setSecuencia(sec);
 
-                    secuencia.setTamano(cont);
+                secuencia.setTamano(cont);
 
-                    lista.push_back(secuencia);
-                    sec = "";
-                    datos = "";
-                    cont = 0;
-                }
+                lista.push_back(secuencia);
+                sec = "";
+                datos = "";
+                aux = 0;
+
                 datos = str;
             }
             else
@@ -50,7 +48,7 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
                 if (aux == 0)
                 {
                     sec = str;
-                    cont = strlen(str);
+                    cont = sec.size();
                     aux++;
                 }
                 else
@@ -62,10 +60,10 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
         Secuencia secuencia;
         secuencia.setNombre_sec(datos);
         secuencia.setSecuencia(sec);
-
+        secuencia.setTamano(cont);
         lista.push_back(secuencia);
         sec = "";
-        aux=0;
+        aux = 0;
     }
     else
     {
@@ -118,7 +116,7 @@ void listarSecuenciaw(vector<char> cod, int &aux)
 }
 
 void listarSecuencias(list<Secuencia> lista)
-{    
+{
     int cont = 0;
     // Cuantas veces cada codigo aparece en la secuencia por cada codigo genetico
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
