@@ -29,8 +29,7 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
             fe.getline(str, MAX_LENGHT);
             if (str[0] == '>')
             {
-                if (sec != "")
-                {
+                
                     Secuencia secuencia;
                     secuencia.setNombre_sec(datos);
                     secuencia.setSecuencia(sec);
@@ -40,8 +39,8 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
                     lista.push_back(secuencia);
                     sec = "";
                     datos = "";
-                    cont = 0;
-                }
+                    aux = 0;
+                
                 datos = str;
             }
             else
@@ -62,7 +61,7 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
         Secuencia secuencia;
         secuencia.setNombre_sec(datos);
         secuencia.setSecuencia(sec);
-
+        secuencia.setTamano(cont);
         lista.push_back(secuencia);
         sec = "";
         aux=0;
@@ -71,6 +70,8 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     {
         cout << "No se pudo abrir el archivo" << endl;
     }
+    fe.close();
+    lista.pop_front();
     cout << "Secuencias guardadas" << endl;
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
