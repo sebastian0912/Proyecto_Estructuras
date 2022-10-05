@@ -69,6 +69,8 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     {
         cout << "No se pudo abrir el archivo" << endl;
     }
+    fe.close();
+    lista.pop_front();
     cout << "Secuencias guardadas" << endl;
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
