@@ -9,12 +9,14 @@
 
 #define MAX_LENGHT 1000
 
+using namespace std;
+
 // Constructor
 Secuencia::Secuencia() {}
 
 Secuencia::~Secuencia() {}
 
-void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
+void guardar(list<Secuencia> &lista, string nombre_archivo)
 {
     char *str = new char[800];
     string datos;
@@ -74,9 +76,9 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     cout << "Secuencias guardadas" << endl;
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
-        cout << "   " << it->nombre_sec << endl;
-        cout << "   " << it->tamano << endl;
-        cout << "   " << it->secuencia << endl;
+        cout << "     " << it->getNombre_sec() << endl;
+        cout << "Ancho: " << it->getTamano() << endl;
+        cout << "     " << it->getSecuencia() << endl;
     }
     cout << "Tamaño de la lista: " << lista.size() << endl;
     fe.close();
@@ -238,4 +240,97 @@ void sub_secuencia(string sub, list<Secuencia> lista)
     cout << "La subsecuencia " << sub << " aparece " << cont << " veces" << endl;
 
     // es_subsecuencia CAACATCACCAATCA
+}
+
+void cambiarValorPorX(string sub, vector<char> &aux)
+{
+    // cout<<cadena<<endl;
+    // cambiar valor por X donde este la secuencia completa
+    int cont = sub.size();
+    for (int i = 0; i < aux.size(); i++)
+    {
+        if (aux[i] == sub[0])
+        {
+            for (int j = 0; j < sub.size(); j++)
+            {
+                if (aux[i + j] == sub[j])
+                {
+                    cont--;
+                }
+            }
+            if (cont == 0)
+            {
+                for (int j = 0; j < sub.size(); j++)
+                {
+                    aux[i + j] = 'X';
+                }
+            }
+            cont = sub.size();
+        }
+    }
+}
+
+void enmascarar(string sub, list<Secuencia> &lista)
+{
+    vector<char> secuencias;
+    string aux;
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        vector<char>::iterator it2 = secuencias.begin();
+        for (int i = 0; i < it->getSecuencia().size(); i++)
+        {
+            secuencias.push_back(it->getSecuencia()[i]);
+        }
+        cambiarValorPorX(sub, secuencias);
+        for (int i = 0; i < secuencias.size(); i++)
+        {
+            aux += secuencias[i];
+        }
+        it->setSecuencia(aux);
+
+        secuencias.clear();
+        aux.clear();
+    }
+
+    // listar secuencias
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        cout << it->getNombre_sec() << endl;
+        cout <<"Ancho: " <<it->getTamano() << endl;
+        cout << it->getSecuencia() << endl;
+        
+    }
+}
+
+void guardarEnArhivo(string nombreArchivo, list<Secuencia> &lista)
+{
+    int cont = 0;
+    ofstream archivo;
+    archivo.open(nombreArchivo);
+    if (archivo.fail())
+    {
+        cout << "No se pudo abrir el archivo" << endl;
+        exit(1);
+    }
+    else
+    {
+        for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+        {
+            archivo << it->getNombre_sec() << endl;
+            for (int i = 0; i < it->getSecuencia().size(); i++)
+            {
+                if (cont == it->getTamano()){
+                    archivo << endl;   
+                    cont = 0;                 
+                } 
+                cont++;
+                
+                archivo << it->getSecuencia()[i];
+            }
+            cont=0;
+            archivo << endl;
+        }
+        archivo.close();
+        
+    }
 }
