@@ -94,7 +94,7 @@ int main()
             {
                 if (centinela == true)
                 {
-                    //listarSecuencias(lista);
+                    listarSecuencias(lista_secuencias);
                 }
             }
         }
