@@ -15,6 +15,10 @@ public:
 
     void guardar(list<Secuencia> &lista, string nombre_archivo);
 
+    void listarSecuenciaw(vector<char> cod, int &aux);
+    void listarSecuencias(list<Secuencia> lista);
+
+    
     string getNombre_sec()
     {
         return nombre_sec;
@@ -32,7 +36,7 @@ public:
 
     void setSecuencia(string secuencia_sec)
     {        
-        secuencia += secuencia_sec;
+        secuencia = secuencia_sec;
         
     }
 
