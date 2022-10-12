@@ -240,3 +240,35 @@ void cambiarValorPorX(string sub, vector<char> &aux)
         }
     }
 }
+
+void enmascarar(string sub, list<Secuencia> &lista)
+{
+    vector<char> secuencias;
+    string aux;
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        vector<char>::iterator it2 = secuencias.begin();
+        for (int i = 0; i < it->getSecuencia().size(); i++)
+        {
+            secuencias.push_back(it->getSecuencia()[i]);
+        }
+        cambiarValorPorX(sub, secuencias);
+        for (int i = 0; i < secuencias.size(); i++)
+        {
+            aux += secuencias[i];
+        }
+        it->setSecuencia(aux);
+
+        secuencias.clear();
+        aux.clear();
+    }
+
+    // listar secuencias
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        cout << it->getNombre_sec() << endl;
+        cout <<"Ancho: " <<it->getTamano() << endl;
+        cout << it->getSecuencia() << endl;
+        
+    }
+}
