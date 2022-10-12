@@ -212,3 +212,31 @@ void sub_secuencia(string sub, list<Secuencia> lista)
 
     // es_subsecuencia CAACATCACCAATCA
 }
+
+void cambiarValorPorX(string sub, vector<char> &aux)
+{
+    // cout<<cadena<<endl;
+    // cambiar valor por X donde este la secuencia completa
+    int cont = sub.size();
+    for (int i = 0; i < aux.size(); i++)
+    {
+        if (aux[i] == sub[0])
+        {
+            for (int j = 0; j < sub.size(); j++)
+            {
+                if (aux[i + j] == sub[j])
+                {
+                    cont--;
+                }
+            }
+            if (cont == 0)
+            {
+                for (int j = 0; j < sub.size(); j++)
+                {
+                    aux[i + j] = 'X';
+                }
+            }
+            cont = sub.size();
+        }
+    }
+}
