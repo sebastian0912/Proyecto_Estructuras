@@ -49,19 +49,9 @@ int main()
                 NombreArchivoOld = comandos[1];
                 lista_secuencias.clear();
                 
-                guardar(lista_secuencias, comandos[1]);
+                guardar(lista_secuencias, comandos[1]);                
                 
-                //guardar(lista, comandos[1]);
-                centinela = true;
-                /*for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
-                {
-                    cout << "   " << it->nombre_sec << endl;
-                    for (vector<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
-                    {
-                        cout << *it2;
-                    }
-                    cout << endl;
-                }*/
+                centinela = true;                
             }
         }
 
@@ -173,6 +163,7 @@ int main()
             }
             else if (comandos.size() == 2)
             {
+                
                 cout << "Codificado realizado" << endl;
             }
         }
