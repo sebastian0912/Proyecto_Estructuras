@@ -116,4 +116,43 @@ void listarSecuenciaw(vector<char> cod, int &aux)
     }
 }
 
+void listarSecuencias(list<Secuencia> lista)
+{
+    int cont = 0;
+    // Cuantas veces cada codigo aparece en la secuencia por cada codigo genetico
+    for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
+    {
+        vector<char> secuencias;
+        for (int i = 0; i < it->getSecuencia().size(); i++)
+        {
+            secuencias.push_back(it->getSecuencia()[i]);
+        }
+        vector<char>::iterator it2 = secuencias.begin();
 
+        // it2 vacio
+        if (it2 == secuencias.end())
+        {
+            break;
+        }
+        else
+        {
+            cout << it->getNombre_sec() << endl;
+            listarSecuenciaw(secuencias, cont);
+            if (cont < 1)
+            {
+                cout << "Esta secuencia contiene al menos " << cont * -1 << " bases" << endl;
+            }
+            else
+            {
+                cout << "Esta secuencia contiene " << cont << " bases" << endl;
+            }
+            cont = 0;
+        }
+        for (int i = 0; i < secuencias.size(); i++)
+        {
+            cout << secuencias[i];
+        }
+        secuencias.clear();
+        system("pause");
+    }
+}
