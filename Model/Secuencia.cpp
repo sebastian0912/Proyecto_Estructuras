@@ -81,4 +81,39 @@ void Secuencia::guardar(list<Secuencia> &lista, string nombre_archivo)
     cout << "Tamaño de la lista: " << lista.size() << endl;
     fe.close();
 }
+void listarSecuenciaw(vector<char> cod, int &aux)
+{
+    int cont = 0, cont2 = 0;
+    vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};
+    for (int i = 0; i < codigos.size(); i++)
+    {
+        vector<char>::iterator it = cod.begin();
+        while (it != cod.end())
+        {
+            if (*it == codigos[i])
+            {
+                cont++;
+            }
+            if (*it == '-')
+            {
+                cont2++;
+            }
+            it++;
+        }
+
+        if (cont != 0 && cont2 != 0 && codigos[i] != '-')
+        {
+            aux -= cont;
+            cout << codigos[i] << " Contiene: " << cont << " bases" << endl;
+        }
+        else if (cont != 0 && cont2 == 0 && codigos[i] != '-')
+        {
+            aux += cont;
+            cout << codigos[i] << " Contiene: " << cont << " bases" << endl;
+        }
+        cont = 0;
+        cont2 = 0;
+    }
+}
+
 
