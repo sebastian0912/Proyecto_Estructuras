@@ -2,6 +2,7 @@
 #define NODEHUFFMANTREE_H
 
 #pragma once
+#include <unordered_map>
 
 class NodeHuffmanTree
 {
@@ -45,7 +46,8 @@ public:
     // Función para asignar un nuevo nodo de árbol
     NodeHuffmanTree(char ch, int freq, NodeHuffmanTree *left, NodeHuffmanTree *right);
     bool isLeaf(NodeHuffmanTree *root);
-    
+    void encode(NodeHuffmanTree* root, string str, unordered_map<char, string> &huffmanCode);
+    unordered_map<char, string> buildHuffmanTree( priority_queue<Caracteres> cac);
 
 private:
     char ch;

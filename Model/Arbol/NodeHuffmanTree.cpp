@@ -1,5 +1,5 @@
 #include "NodeHuffmanTree.h"
-#include "Caracteres.h"
+#include "../Caracteres.h"
 #include <iostream>
 #include <string>
 #include <queue>
@@ -55,7 +55,7 @@ struct comp
     }
 };
 
-void buildHuffmanTree( priority_queue<Caracteres> cac)
+unordered_map<char, string> buildHuffmanTree( priority_queue<Caracteres> cac)
 {   
     int sum =0;
     // Crear una cola de prioridad para almacenar nodos en vivo del árbol de Huffman
@@ -87,12 +87,12 @@ void buildHuffmanTree( priority_queue<Caracteres> cac)
         NodeHuffmanTree *right = pq.top();    pq.pop();
  
         // crea un nuevo nodo interno con frecuencia igual a la suma de las frecuencias de los dos nodos eliminados
-        cout << "left: " << left->getCh() << " " << left->getFreq() << endl;
-        cout << "right: " << right->getCh() << " " << right->getFreq() << endl;
+        //cout << "left: " << left->getCh() << " " << left->getFreq() << endl;
+        //cout << "right: " << right->getCh() << " " << right->getFreq() << endl;
         int sum = left->getFreq() + right->getFreq();
-        cout << "Suma: " << sum << endl;
+        //cout << "Suma: " << sum << endl;
         pq.push(new NodeHuffmanTree('\0', sum, left, right));
-        cout << "------------------"<< endl;    
+        //cout << "------------------"<< endl;    
     }
     // `root` stores pointer to the root of Huffman Tree
 	NodeHuffmanTree* root = pq.top();
@@ -102,12 +102,11 @@ void buildHuffmanTree( priority_queue<Caracteres> cac)
 	unordered_map<char, string> huffmanCode;
 	encode(root, EMPTY_STRING, huffmanCode);
 
-	cout << "Huffman Codes are:\n" << endl;
+	/*cout << "Huffman Codes are:\n" << endl;
 	for (auto pair: huffmanCode) {
 		cout << pair.first << " " << pair.second << endl;
-	}
+	}*/
 
     
-    
-    
-}
+    return huffmanCode;
+    }

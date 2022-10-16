@@ -7,8 +7,11 @@
 #include <list>
 #include <iterator>
 #include <queue>
+#include <unordered_map>
+#include <iomanip>
+
 #include "Caracteres.cpp"
-#include "NodeHuffmanTree.cpp"
+#include "Arbol/NodeHuffmanTree.cpp"
 
 #define MAX_LENGHT 1000
 
@@ -427,8 +430,14 @@ void sacarCaracteres(string nombreArchivo)
         cout << aux.getCaracter() << " " << aux.getFrecuencia() << endl;
         g.pop();
     }*/
-
-    buildHuffmanTree(g);
+    
+    unordered_map<char, string> huffmanCode;
+    huffmanCode = buildHuffmanTree(g);
+    cout << "Codificacion de Huffman: " << endl<< endl;
+    for (auto pair: huffmanCode)
+    {
+        cout <<setw(8) << pair.first << setw(20)<< pair.second << endl;
+    }    
     
 }
 
