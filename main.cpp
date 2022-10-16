@@ -13,9 +13,7 @@ int main()
 {
     char opcion[50], delimitador[] = " ";
     vector<string> comandos;    
-    list <Secuencia> lista_secuencias;
-    Secuencia secuencia;
-    int it = 0, cont;
+    list <Secuencia> lista_secuencias;    
     string NombreArchivoOld;
     bool bandera = false;
     bool centinela;
@@ -51,19 +49,9 @@ int main()
                 NombreArchivoOld = comandos[1];
                 lista_secuencias.clear();
                 
-                secuencia.guardar(lista_secuencias, comandos[1]);
+                guardar(lista_secuencias, comandos[1]);                
                 
-                //guardar(lista, comandos[1]);
-                centinela = true;
-                /*for (list<CodigosGeneticos>::iterator it = lista.begin(); it != lista.end(); ++it)
-                {
-                    cout << "   " << it->nombre_sec << endl;
-                    for (vector<char>::iterator it2 = it->secuencia.begin(); it2 != it->secuencia.end(); ++it2)
-                    {
-                        cout << *it2;
-                    }
-                    cout << endl;
-                }*/
+                centinela = true;                
             }
         }
 
@@ -94,7 +82,7 @@ int main()
             {
                 if (centinela == true)
                 {
-                    //listarSecuencias(lista);
+                    listarSecuencias(lista_secuencias);
                 }
             }
         }
@@ -110,7 +98,7 @@ int main()
             {
                 if (centinela == true)
                 {
-                    //histograma(comandos[1], lista);
+                    histograma(comandos[1], lista_secuencias);
                 }
             }
         }
@@ -126,7 +114,7 @@ int main()
             {
                 if (centinela == true)
                 {  
-                    //sub_secuencia(comandos[1], lista);
+                    sub_secuencia(comandos[1], lista_secuencias);
                 }
                 else{
                     cout << "   no hay secuencias cargadas" << endl;
@@ -145,7 +133,7 @@ int main()
             {
                 if (centinela == true)
                 {  
-                    //enmascarar(comandos[1], lista);
+                    enmascarar(comandos[1], lista_secuencias);
                 }
                 else{
                     cout << "   no hay secuencias cargadas" << endl;
@@ -161,10 +149,8 @@ int main()
                 cout << "guardar nombre_archivo" << endl;
             }
             else if (comandos.size() == 2)
-            {           
-                //cout <<NombreArchivoOld<<endl;     
-                //tamañomatriz(NombreArchivoOld);
-                //guardarEnArhivo(comandos[1], lista, cont);
+            { 
+                guardarEnArhivo(comandos[1], lista_secuencias);
             }
         }
 
@@ -177,7 +163,8 @@ int main()
             }
             else if (comandos.size() == 2)
             {
-                cout << "Codificado realizado" << endl;
+                sacarCaracteres (NombreArchivoOld);
+                cout <<endl<< "Codificado realizado" << endl;
             }
         }
 
