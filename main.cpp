@@ -163,8 +163,8 @@ int main()
             }
             else if (comandos.size() == 2)
             {
-                
-                cout << "Codificado realizado" << endl;
+                sacarCaracteres (NombreArchivoOld);
+                cout <<endl<< "Codificado realizado" << endl;
             }
         }
 

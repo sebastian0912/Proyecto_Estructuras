@@ -6,6 +6,9 @@
 #include <vector>
 #include <list>
 #include <iterator>
+#include <queue>
+#include "Caracteres.cpp"
+#include "NodeHuffmanTree.cpp"
 
 #define MAX_LENGHT 1000
 
@@ -296,9 +299,8 @@ void enmascarar(string sub, list<Secuencia> &lista)
     for (list<Secuencia>::iterator it = lista.begin(); it != lista.end(); ++it)
     {
         cout << it->getNombre_sec() << endl;
-        cout <<"Ancho: " <<it->getTamano() << endl;
+        cout << "Ancho: " << it->getTamano() << endl;
         cout << it->getSecuencia() << endl;
-        
     }
 }
 
@@ -319,18 +321,114 @@ void guardarEnArhivo(string nombreArchivo, list<Secuencia> &lista)
             archivo << it->getNombre_sec() << endl;
             for (int i = 0; i < it->getSecuencia().size(); i++)
             {
-                if (cont == it->getTamano()){
-                    archivo << endl;   
-                    cont = 0;                 
-                } 
+                if (cont == it->getTamano())
+                {
+                    archivo << endl;
+                    cont = 0;
+                }
                 cont++;
-                
+
                 archivo << it->getSecuencia()[i];
             }
-            cont=0;
+            cont = 0;
             archivo << endl;
         }
         archivo.close();
-        
     }
 }
+
+bool operator>(Caracteres &s1, Caracteres &s2)
+{
+    return s1.getFrecuencia() > s2.getFrecuencia();
+}
+
+void sacarCaracteres(string nombreArchivo)
+{
+    ifstream archivo;
+    archivo.open(nombreArchivo);
+    // leer caracter por caracter
+    char caracter;
+    vector<char> listaLetrasArchivo;
+    vector<char> caracteres;
+    priority_queue<Caracteres> g;
+
+    if (archivo.fail())
+    {
+        cout << "No se pudo abrir el archivo" << endl;
+        exit(1);
+    }
+    else
+    {
+        while (!archivo.eof())
+        {
+            archivo.get(caracter);
+            if ((int)caracter >= 65 || (int)caracter <= 122 || (int)caracter == 10 || (int)caracter == 32 || (int)caracter == 13 || (int)caracter == 62)
+            {
+                // cout<<caracter<<endl;
+                //  guardar caracteres en el vector caracteres sin repetirse
+                if ((int)caracter == 10 || (int)caracter == 32 || (int)caracter == 13)
+                {
+                    caracter = '/';
+                }
+                listaLetrasArchivo.push_back(caracter);
+            }
+        }
+        archivo.close();
+    }
+    /*for (int i = 0; i < listaLetrasArchivo.size(); i++)
+    {
+        cout<<listaLetrasArchivo[i];
+    }*/
+    // guardar caracteres en vector caracteres sin repetirse
+    caracteres.push_back(listaLetrasArchivo[0]);
+    for (int i = 0; i < listaLetrasArchivo.size(); i++)
+    {
+        for (int j = 0; j < caracteres.size(); j++)
+        {
+            if (listaLetrasArchivo[i] == caracteres[j])
+            {
+                break;
+            }
+            else if (j == caracteres.size() - 1)
+            {
+                caracteres.push_back(listaLetrasArchivo[i]);
+            }
+        }
+    }
+
+    // imprimir caracteres
+
+    /*for (int i = 0; i < caracteres.size(); i++)
+    {
+        cout << caracteres[i]<<endl;
+    }*/
+
+    // contar cuantas veces aparece cada caracter y guardar lo en la cola de prioridad
+    int cont = 0;
+    Caracteres c = Caracteres();
+    for (int i = 0; i < caracteres.size(); i++)
+    {
+        for (int j = 0; j < listaLetrasArchivo.size(); j++)
+        {
+            if (caracteres[i] == listaLetrasArchivo[j])
+            {
+                cont++;
+            }
+        }
+        c.setCaracter(caracteres[i]);
+        c.setFrecuencia(cont);
+        g.push(c);
+        cont = 0;
+    }
+    /*
+    while (!g.empty())
+    {
+        Caracteres aux = g.top();    
+        cout << aux.getCaracter() << " " << aux.getFrecuencia() << endl;
+        g.pop();
+    }*/
+
+    buildHuffmanTree(g);
+    
+}
+
