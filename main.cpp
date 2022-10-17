@@ -12,8 +12,8 @@ using namespace std;
 int main()
 {
     char opcion[50], delimitador[] = " ";
-    vector<string> comandos;    
-    list <Secuencia> lista_secuencias;    
+    vector<string> comandos;
+    list<Secuencia> lista_secuencias;
     string NombreArchivoOld;
     bool bandera = false;
     bool centinela;
@@ -48,10 +48,10 @@ int main()
                 comandos[1] = "archivosFASTA/" + comandos[1];
                 NombreArchivoOld = comandos[1];
                 lista_secuencias.clear();
-                
-                guardar(lista_secuencias, comandos[1]);                
-                
-                centinela = true;                
+
+                guardar(lista_secuencias, comandos[1]);
+
+                centinela = true;
             }
         }
 
@@ -113,10 +113,11 @@ int main()
             else if (comandos.size() == 2)
             {
                 if (centinela == true)
-                {  
+                {
                     sub_secuencia(comandos[1], lista_secuencias);
                 }
-                else{
+                else
+                {
                     cout << "   no hay secuencias cargadas" << endl;
                 }
             }
@@ -132,12 +133,13 @@ int main()
             else if (comandos.size() == 2)
             {
                 if (centinela == true)
-                {  
+                {
                     enmascarar(comandos[1], lista_secuencias);
                 }
-                else{
+                else
+                {
                     cout << "   no hay secuencias cargadas" << endl;
-                }                
+                }
             }
         }
 
@@ -149,7 +151,7 @@ int main()
                 cout << "guardar nombre_archivo" << endl;
             }
             else if (comandos.size() == 2)
-            { 
+            {
                 guardarEnArhivo(comandos[1], lista_secuencias);
             }
         }
@@ -163,8 +165,18 @@ int main()
             }
             else if (comandos.size() == 2)
             {
-                sacarCaracteres (NombreArchivoOld);
-                cout <<endl<< "Codificado realizado" << endl;
+                if (strstr(comandos[1].c_str(), ".fabin") == NULL)
+                {
+                    cout << "El arcivo tiene que ser un .fabin" << endl;
+                }
+                else
+                {
+                    sacarCaracteres(NombreArchivoOld);
+                    cout<<endl << endl;
+                    codificacion (NombreArchivoOld, lista_secuencias );
+                    cout << endl
+                         << "Codificado realizado" << endl;
+                }
             }
         }
 
