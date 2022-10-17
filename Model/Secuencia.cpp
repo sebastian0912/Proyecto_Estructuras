@@ -1,4 +1,4 @@
-#include "Secuencia.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -10,8 +10,10 @@
 #include <unordered_map>
 #include <iomanip>
 
+#include "Secuencia.h"
 #include "Caracteres.cpp"
 #include "Arbol/NodeHuffmanTree.cpp"
+#include "Codificacion/Codificacion.cpp"
 
 #define MAX_LENGHT 1000
 
@@ -21,6 +23,9 @@ using namespace std;
 Secuencia::Secuencia() {}
 
 Secuencia::~Secuencia() {}
+
+unordered_map<char, string> huffmanCode;
+
 
 void guardar(list<Secuencia> &lista, string nombre_archivo)
 {
@@ -431,13 +436,71 @@ void sacarCaracteres(string nombreArchivo)
         g.pop();
     }*/
     
-    unordered_map<char, string> huffmanCode;
+    
     huffmanCode = buildHuffmanTree(g);
     cout << "Codificacion de Huffman: " << endl<< endl;
     for (auto pair: huffmanCode)
     {
         cout <<setw(8) << pair.first << setw(20)<< pair.second << endl;
     }    
+    
+}
+
+void cantidadBases(Codificacion &cod, list<Secuencia> &lista){
+    int cont = 0, cont2 = 0;
+    vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};
+    list<Secuencia>:: iterator it = lista.begin();
+    map <char, double> mapa;
+    for (int i = 0; i < codigos.size(); i++)
+    {
+        for (it = lista.begin(); it != lista.end(); ++it)
+        {
+            
+            for (int j = 0; j < it->getSecuencia().size(); j++)
+            {
+                if (codigos[i] == it->getSecuencia()[j])
+                {
+                    cont++;
+                }
+            }
+        }        
+        
+        mapa.insert({codigos[i], cont});
+        
+        cont = 0;
+        cont2++;
+    }
+    cod.setBases(mapa);
+}
+
+
+
+
+void generarCodifiacionArchivo (string nombreArchivo, unordered_map<char, string> &huffmanCode, Codificacion &cod, list<Secuencia> &lista){
+    cantidadBases(cod, lista);
+    cout << "Cantidad de bases: " << endl<< endl;
+    for (auto pair: cod.getBases())
+    {
+        cout <<setw(8) << pair.first << setw(20)<< pair.second << endl;
+    }
+}   
+
+
+
+void codificacion (string nombreArchivo, list<Secuencia> &lista ){
+    short acum;
+    Codificacion cod = Codificacion();
+    generarCodifiacionArchivo(nombreArchivo, huffmanCode, cod, lista);
+    for (auto pair: cod.getBases())
+    {
+       acum+=pair.second; 
+    }
+    cod.setCantidadBases(acum);
+    cout << "Cantidad de bases: " << endl;
+    cout << cod.getCantidadBases() << endl;
+    cod.setCantidadSecuencias(lista.size());
+    cout << "Cantidad de secuencias: " << endl;
+    cout << cod.getCantidadSecuencias() << endl;
     
 }
 
