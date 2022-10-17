@@ -26,7 +26,6 @@ Secuencia::~Secuencia() {}
 
 unordered_map<char, string> huffmanCode;
 
-
 void guardar(list<Secuencia> &lista, string nombre_archivo)
 {
     char *str = new char[800];
@@ -431,31 +430,31 @@ void sacarCaracteres(string nombreArchivo)
     /*
     while (!g.empty())
     {
-        Caracteres aux = g.top();    
+        Caracteres aux = g.top();
         cout << aux.getCaracter() << " " << aux.getFrecuencia() << endl;
         g.pop();
     }*/
-    
-    
+
     huffmanCode = buildHuffmanTree(g);
-    cout << "Codificacion de Huffman: " << endl<< endl;
-    for (auto pair: huffmanCode)
+    cout << "Codificacion de Huffman: " << endl
+         << endl;
+    for (auto pair : huffmanCode)
     {
-        cout <<setw(8) << pair.first << setw(20)<< pair.second << endl;
-    }    
-    
+        cout << setw(8) << pair.first << setw(20) << pair.second << endl;
+    }
 }
 
-void cantidadBases(Codificacion &cod, list<Secuencia> &lista){
+void cantidadBases(Codificacion &cod, list<Secuencia> &lista)
+{
     int cont = 0, cont2 = 0;
     vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};
-    list<Secuencia>:: iterator it = lista.begin();
-    map <char, double> mapa;
+    list<Secuencia>::iterator it = lista.begin();
+    map<char, double> mapa;
     for (int i = 0; i < codigos.size(); i++)
     {
         for (it = lista.begin(); it != lista.end(); ++it)
         {
-            
+
             for (int j = 0; j < it->getSecuencia().size(); j++)
             {
                 if (codigos[i] == it->getSecuencia()[j])
@@ -463,44 +462,102 @@ void cantidadBases(Codificacion &cod, list<Secuencia> &lista){
                     cont++;
                 }
             }
-        }        
-        
+        }
+
         mapa.insert({codigos[i], cont});
-        
+
         cont = 0;
         cont2++;
     }
     cod.setBases(mapa);
 }
 
-
-
-
-void generarCodifiacionArchivo (string nombreArchivo, unordered_map<char, string> &huffmanCode, Codificacion &cod, list<Secuencia> &lista){
+void generarCodifiacionArchivo(string nombreArchivo, unordered_map<char, string> &huffmanCode, Codificacion &cod, list<Secuencia> &lista)
+{
     cantidadBases(cod, lista);
-    cout << "Cantidad de bases: " << endl<< endl;
-    for (auto pair: cod.getBases())
+    cout << "Cantidad de bases: " << endl
+         << endl;
+    for (auto pair : cod.getBases())
     {
-        cout <<setw(8) << pair.first << setw(20)<< pair.second << endl;
+        cout << setw(8) << pair.first << setw(20) << pair.second << endl;
     }
-}   
+}
 
+void tamanoNombreSecuencia(Codificacion &cod, list<Secuencia> &lista)
+{
+    list<Secuencia>::iterator it = lista.begin();
+    vector<int> tamNombre;
+    int cont = 0;
+    for (it = lista.begin(); it != lista.end(); ++it)
+    {
+        tamNombre.push_back(it->getNombre_sec().size());
+    }
+    cod.setTamanoNombresecuencia(tamNombre);
+}
 
+void ultimoCaracterDelNombre(Codificacion &cod, list<Secuencia> &lista)
+{
+    list<Secuencia>::iterator it = lista.begin();
+    vector<char> ultimoCaracter;
+    for (it = lista.begin(); it != lista.end(); ++it)
+    {
+        ultimoCaracter.push_back(it->getNombre_sec()[it->getNombre_sec().size() - 1]);
+    }
+    cod.setUltimoCaracterDelNombre(ultimoCaracter);
+}
 
-void codificacion (string nombreArchivo, list<Secuencia> &lista ){
+void tamanoSecuencia(Codificacion &cod, list<Secuencia> &lista)
+{
+    list<Secuencia>::iterator it = lista.begin();
+    vector<double> tamSecuencia;
+    for (it = lista.begin(); it != lista.end(); ++it)
+    {
+        tamSecuencia.push_back(it->getTamano());
+    }
+    cod.setLongitudSecuencia(tamSecuencia);
+}
+
+void codificacion(string nombreArchivo, list<Secuencia> &lista)
+{
     short acum;
     Codificacion cod = Codificacion();
     generarCodifiacionArchivo(nombreArchivo, huffmanCode, cod, lista);
-    for (auto pair: cod.getBases())
+    for (auto pair : cod.getBases())
     {
-       acum+=pair.second; 
+        acum += pair.second;
     }
     cod.setCantidadBases(acum);
+    cout << endl;
+
     cout << "Cantidad de bases: " << endl;
     cout << cod.getCantidadBases() << endl;
     cod.setCantidadSecuencias(lista.size());
+    cout << endl;
+
     cout << "Cantidad de secuencias: " << endl;
     cout << cod.getCantidadSecuencias() << endl;
-    
-}
+    tamanoNombreSecuencia(cod, lista);
+    cout << endl;
 
+    cout << "Tamano de nombre de secuencia: " << endl;
+    for (int i = 0; i < cod.getTamanoNombresecuencia().size(); i++)
+    {
+        cout << cod.getTamanoNombresecuencia()[i] << endl;
+    }
+
+    ultimoCaracterDelNombre(cod, lista);
+    cout << endl;
+    cout << "Ultimo caracter del nombre: " << endl;
+    for (int i = 0; i < cod.getUltimoCaracterDelNombre().size(); i++)
+    {
+        cout << cod.getUltimoCaracterDelNombre()[i] << endl;
+    }
+    
+    tamanoSecuencia(cod, lista);
+    cout << endl;
+    cout << "Tamano de secuencia: " << endl;
+    for (int i = 0; i < cod.getLongitudSecuencia().size(); i++)
+    {
+        cout << cod.getLongitudSecuencia()[i] << endl;
+    }
+}
