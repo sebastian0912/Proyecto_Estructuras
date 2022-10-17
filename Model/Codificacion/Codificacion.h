@@ -36,7 +36,10 @@ public:
     void setTamanoNombresecuencia(const vector<int> &tamanoNombresecuencia_) { tamanoNombresecuencia = tamanoNombresecuencia_; }
 
     vector<double> getLongitudSecuencia() const { return longitudSecuencia; }
-    void setLongitudSecuencia(const vector<double> &longitudSecuencia_) { longitudSecuencia = longitudSecuencia_; }    
+    void setLongitudSecuencia(const vector<double> &longitudSecuencia_) { longitudSecuencia = longitudSecuencia_; }
+
+    int getCantidadCerosAgregados() const { return cantidadCerosAgregados; }
+    void setCantidadCerosAgregados(int cantidadCerosAgregados_) { cantidadCerosAgregados = cantidadCerosAgregados_; }    
 
 private:
 
@@ -46,6 +49,7 @@ private:
     vector<int> tamanoNombresecuencia;
     vector<char> ultimoCaracterDelNombre;
     vector<double> longitudSecuencia;    
+    int cantidadCerosAgregados;
     vector<string> binario;
 
 };

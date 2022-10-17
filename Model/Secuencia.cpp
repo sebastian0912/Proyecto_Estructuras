@@ -25,6 +25,7 @@ Secuencia::Secuencia() {}
 Secuencia::~Secuencia() {}
 
 unordered_map<char, string> huffmanCode;
+vector<char> listaLetrasArchivo;
 
 void guardar(list<Secuencia> &lista, string nombre_archivo)
 {
@@ -355,7 +356,7 @@ void sacarCaracteres(string nombreArchivo)
     archivo.open(nombreArchivo);
     // leer caracter por caracter
     char caracter;
-    vector<char> listaLetrasArchivo;
+    
     vector<char> caracteres;
     priority_queue<Caracteres> g;
 
@@ -436,7 +437,7 @@ void sacarCaracteres(string nombreArchivo)
     }*/
 
     huffmanCode = buildHuffmanTree(g);
-    cout << "Codificacion de Huffman: " << endl
+    cout <<endl<<endl<< "Codificacion de Huffman: " << endl
          << endl;
     for (auto pair : huffmanCode)
     {
@@ -470,17 +471,6 @@ void cantidadBases(Codificacion &cod, list<Secuencia> &lista)
         cont2++;
     }
     cod.setBases(mapa);
-}
-
-void generarCodifiacionArchivo(string nombreArchivo, unordered_map<char, string> &huffmanCode, Codificacion &cod, list<Secuencia> &lista)
-{
-    cantidadBases(cod, lista);
-    cout << "Cantidad de bases: " << endl
-         << endl;
-    for (auto pair : cod.getBases())
-    {
-        cout << setw(8) << pair.first << setw(20) << pair.second << endl;
-    }
 }
 
 void tamanoNombreSecuencia(Codificacion &cod, list<Secuencia> &lista)
@@ -517,9 +507,38 @@ void tamanoSecuencia(Codificacion &cod, list<Secuencia> &lista)
     cod.setLongitudSecuencia(tamSecuencia);
 }
 
+void generarCodifiacionArchivo(string nombreArchivo, unordered_map<char, string> &huffmanCode, Codificacion &cod, list<Secuencia> &lista)
+{
+    cantidadBases(cod, lista);
+    cout << "Cantidad de bases: " << endl
+         << endl;
+    for (auto pair : cod.getBases())
+    {
+        cout << setw(8) << pair.first << setw(20) << pair.second << endl;
+    }
+}
+
+string codificarSecuencia(vector<char> listaLetrasArchivo, unordered_map<char, string> &huffmanCode)
+{
+    string codificacion = "";
+    for (int i=0; i < listaLetrasArchivo.size(); i++)
+    {
+        for (auto pair : huffmanCode)
+        {
+            if (listaLetrasArchivo[i] == pair.first)
+            {
+                codificacion += pair.second;
+            }
+        }
+    }
+
+    return codificacion;
+}
+
 void codificacion(string nombreArchivo, list<Secuencia> &lista)
 {
     short acum;
+    int tam=0; 
     Codificacion cod = Codificacion();
     generarCodifiacionArchivo(nombreArchivo, huffmanCode, cod, lista);
     for (auto pair : cod.getBases())
@@ -552,12 +571,52 @@ void codificacion(string nombreArchivo, list<Secuencia> &lista)
     {
         cout << cod.getUltimoCaracterDelNombre()[i] << endl;
     }
-    
+
     tamanoSecuencia(cod, lista);
     cout << endl;
     cout << "Tamano de secuencia: " << endl;
     for (int i = 0; i < cod.getLongitudSecuencia().size(); i++)
     {
         cout << cod.getLongitudSecuencia()[i] << endl;
+    }    
+
+    cout << endl;
+    cout << "Codificacion de Huffman: " << endl;
+    cout << codificarSecuencia(listaLetrasArchivo, huffmanCode) << endl;
+    string codificacion = codificarSecuencia(listaLetrasArchivo, huffmanCode);
+    cout << codificacion << endl;
+    cout << endl;
+    vector <string > codificacionSecuencia;
+    // subdividir en cadenas de 8 caracteres la codificacion y guardarla en el vector
+    for (int i = 0; i < codificacion.size(); i += 8)
+    {
+        codificacionSecuencia.push_back(codificacion.substr(i, 8));
     }
+    
+    cout << "Codificacion de Huffman subdividida en 8 caracteres: " << endl;
+    for (int i = 0; i < codificacionSecuencia.size(); i++)
+    {
+        cout << codificacionSecuencia[i] << endl;
+    }
+    cout << endl;
+    cout << "------------------"    << endl;
+    cout << codificacionSecuencia[codificacionSecuencia.size()-1] << endl;
+    cout << "------------------"    << endl;
+    if (codificacionSecuencia[codificacionSecuencia.size() - 1].size() < 8)
+    {
+        tam = 8 - codificacionSecuencia[codificacionSecuencia.size() - 1].size();
+        cod.setCantidadCerosAgregados(tam);
+        // rellenar con 0 hasta completar 8 caracteres a la derecha
+        codificacionSecuencia[codificacionSecuencia.size() - 1].append(8 - codificacionSecuencia[codificacionSecuencia.size() - 1].size(), '0');
+    }
+    if (tam == 0)
+    {
+        cod.setCantidadCerosAgregados(0);
+    }
+    cout << endl;
+    cout << "Cantidad de ceros agregados: " << endl;
+    cout << cod.getCantidadCerosAgregados() << endl;
+
+    
+
 }
