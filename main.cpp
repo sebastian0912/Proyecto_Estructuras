@@ -173,7 +173,7 @@ int main()
                 {
                     sacarCaracteres(NombreArchivoOld);
                     cout<<endl << endl;
-                    codificacion (NombreArchivoOld, lista_secuencias );
+                    codificacion (comandos[1], lista_secuencias );
                     cout << endl
                          << "Codificado realizado" << endl;
                 }
@@ -189,6 +189,7 @@ int main()
             }
             else if (comandos.size() == 2)
             {
+                decodificar(comandos[1]);
                 cout << "Decodificado realizado" << endl;
             }
         }

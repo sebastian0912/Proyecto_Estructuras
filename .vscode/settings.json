@@ -13,6 +13,8 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "system_error": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "bitset": "cpp",
+        "new": "cpp"
     }
 }

@@ -16,6 +16,9 @@ public:
 
     Codificacion();
     ~Codificacion();
+    // contructor de todos atributos de Codificacion
+    Codificacion(short cantidadBases_, map <char, double> bases_, float cantidadSecuencias, vector<int> tamanoNombreSecuencia, vector<char> ultimoCaracterDelNombre, vector<double> longitudSecuencia, int cantidadCerosAgregados, vector<string> binario);
+
 
     short getCantidadBases() const { return cantidadBases; }
     void setCantidadBases(short cantidadBases_) { cantidadBases = cantidadBases_; }

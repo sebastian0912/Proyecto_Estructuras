@@ -9,6 +9,7 @@
 #include <queue>
 #include <unordered_map>
 #include <iomanip>
+#include <bitset>
 
 #include "Secuencia.h"
 #include "Caracteres.cpp"
@@ -26,6 +27,7 @@ Secuencia::~Secuencia() {}
 
 unordered_map<char, string> huffmanCode;
 vector<char> listaLetrasArchivo;
+map<char, double> mapa;
 
 void guardar(list<Secuencia> &lista, string nombre_archivo)
 {
@@ -356,7 +358,7 @@ void sacarCaracteres(string nombreArchivo)
     archivo.open(nombreArchivo);
     // leer caracter por caracter
     char caracter;
-    
+
     vector<char> caracteres;
     priority_queue<Caracteres> g;
 
@@ -437,7 +439,9 @@ void sacarCaracteres(string nombreArchivo)
     }*/
 
     huffmanCode = buildHuffmanTree(g);
-    cout <<endl<<endl<< "Codificacion de Huffman: " << endl
+    cout << endl
+         << endl
+         << "Codificacion de Huffman: " << endl
          << endl;
     for (auto pair : huffmanCode)
     {
@@ -450,7 +454,7 @@ void cantidadBases(Codificacion &cod, list<Secuencia> &lista)
     int cont = 0, cont2 = 0;
     vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};
     list<Secuencia>::iterator it = lista.begin();
-    map<char, double> mapa;
+
     for (int i = 0; i < codigos.size(); i++)
     {
         for (it = lista.begin(); it != lista.end(); ++it)
@@ -464,7 +468,6 @@ void cantidadBases(Codificacion &cod, list<Secuencia> &lista)
                 }
             }
         }
-
         mapa.insert({codigos[i], cont});
 
         cont = 0;
@@ -511,7 +514,7 @@ void generarCodifiacionArchivo(string nombreArchivo, unordered_map<char, string>
 {
     cantidadBases(cod, lista);
     cout << "Cantidad de bases: " << endl
-         << endl;
+         << endl;    
     for (auto pair : cod.getBases())
     {
         cout << setw(8) << pair.first << setw(20) << pair.second << endl;
@@ -521,7 +524,7 @@ void generarCodifiacionArchivo(string nombreArchivo, unordered_map<char, string>
 string codificarSecuencia(vector<char> listaLetrasArchivo, unordered_map<char, string> &huffmanCode)
 {
     string codificacion = "";
-    for (int i=0; i < listaLetrasArchivo.size(); i++)
+    for (int i = 0; i < listaLetrasArchivo.size(); i++)
     {
         for (auto pair : huffmanCode)
         {
@@ -538,7 +541,7 @@ string codificarSecuencia(vector<char> listaLetrasArchivo, unordered_map<char, s
 void codificacion(string nombreArchivo, list<Secuencia> &lista)
 {
     short acum;
-    int tam=0; 
+    int tam = 0;
     Codificacion cod = Codificacion();
     generarCodifiacionArchivo(nombreArchivo, huffmanCode, cod, lista);
     for (auto pair : cod.getBases())
@@ -578,30 +581,31 @@ void codificacion(string nombreArchivo, list<Secuencia> &lista)
     for (int i = 0; i < cod.getLongitudSecuencia().size(); i++)
     {
         cout << cod.getLongitudSecuencia()[i] << endl;
-    }    
+    }
 
     cout << endl;
     cout << "Codificacion de Huffman: " << endl;
-    cout << codificarSecuencia(listaLetrasArchivo, huffmanCode) << endl;
+    //cout << codificarSecuencia(listaLetrasArchivo, huffmanCode) << endl;
     string codificacion = codificarSecuencia(listaLetrasArchivo, huffmanCode);
     cout << codificacion << endl;
     cout << endl;
-    vector <string > codificacionSecuencia;
+    vector<string> codificacionSecuencia;
     // subdividir en cadenas de 8 caracteres la codificacion y guardarla en el vector
     for (int i = 0; i < codificacion.size(); i += 8)
     {
         codificacionSecuencia.push_back(codificacion.substr(i, 8));
     }
-    
+
     cout << "Codificacion de Huffman subdividida en 8 caracteres: " << endl;
     for (int i = 0; i < codificacionSecuencia.size(); i++)
     {
         cout << codificacionSecuencia[i] << endl;
     }
+    cod.setBinario(codificacionSecuencia);
     cout << endl;
-    cout << "------------------"    << endl;
-    cout << codificacionSecuencia[codificacionSecuencia.size()-1] << endl;
-    cout << "------------------"    << endl;
+    cout << "------------------" << endl;
+    cout << codificacionSecuencia[codificacionSecuencia.size() - 1] << endl;
+    cout << "------------------" << endl;
     if (codificacionSecuencia[codificacionSecuencia.size() - 1].size() < 8)
     {
         tam = 8 - codificacionSecuencia[codificacionSecuencia.size() - 1].size();
@@ -617,6 +621,188 @@ void codificacion(string nombreArchivo, list<Secuencia> &lista)
     cout << "Cantidad de ceros agregados: " << endl;
     cout << cod.getCantidadCerosAgregados() << endl;
 
+    // escribir en un archivo texto cod
+    ofstream archivoCod;
+    archivoCod.open(nombreArchivo); 
+    // escribir en el archivo cod la cantidad de bases
+    archivoCod << cod.getCantidadBases() <<endl<< ",";
+    archivoCod << endl;
+    // escribir en el archivo las bases
+    for (auto pair : cod.getBases())
+    {
+        archivoCod << pair.first << " " << pair.second << endl;
+    }
+    archivoCod << ",";
+    archivoCod << endl;
+    
+    // escribir en el archivo la cantidad de secuencias
+    archivoCod << cod.getCantidadSecuencias() <<endl<< ","<< endl;
+    // escribir en el archivo el tamano del nombre de la secuencia
+    for (int i = 0; i < cod.getTamanoNombresecuencia().size(); i++)
+    {
+        archivoCod << cod.getTamanoNombresecuencia()[i] << endl;
+    }
+    
+    archivoCod << ",";
+    archivoCod << endl;
+    // escribir en el archivo el tamano de la secuencia
+    for (int i = 0; i < cod.getLongitudSecuencia().size(); i++)
+    {
+        archivoCod << cod.getLongitudSecuencia()[i] << endl;
+    }
+    archivoCod << ",";
+    archivoCod << endl;
+    // escribir en el archivo el ultimo caracter del nombre de la secuencia
+    for (int i = 0; i < cod.getUltimoCaracterDelNombre().size(); i++)
+    {
+        archivoCod << cod.getUltimoCaracterDelNombre()[i] << endl;
+    }
+    archivoCod << ",";
+    archivoCod << endl;
+    // escribir en el archivo la cantidad de ceros agregados
+    archivoCod << cod.getCantidadCerosAgregados() <<endl<< ",";
+    archivoCod << endl;
+    // escribir en el archivo la codificacion de huffman
+    string cadena;
+    for (int i = 0; i < cod.getBinario().size(); i++)
+    {
+        // convertir numero binario de cadena a decimal con bitset
+        cadena = cod.getBinario()[i];
+        bitset<8> binario(cadena);
+        archivoCod << binario.to_ulong() << endl;
+
+    }
+    archivoCod<< ",";
+    cout << "Archivo cod creado" << endl;
+    archivoCod.close();   
+    
+}
+
+
+void decodificar(string nombreArchivo)
+{
+    
+    short  cantidadBases;
+    map<char, double> bases;
+    float cantidadSecuencias;
+    vector<int> tamanoNombreSecuencia;
+    vector<double> longitudSecuencia;
+    vector<char> ultimoCaracterDelNombre;
+    int cantidadCerosAgregados;
+    vector<string> binario;
+
+    
+    string aux;
+    int contador = 0;
+    // leer linea por linea
+    
+    ifstream archivo(nombreArchivo);
+    string linea;
+    // Obtener línea de archivo, y almacenar contenido en "linea"
+    while (getline(archivo, aux)) {
+        // Lo vamos imprimiendo por pantalla        
+        if (aux == ",")
+        {
+            contador++;
+        }
+        else
+        {
+            switch (contador)
+            {
+            case 0:
+                cantidadBases = stoi(aux);
+                break;
+            case 1:
+                bases[aux[0]] = stod(aux.substr(2, aux.size()));
+                break;
+            case 2:
+                cantidadSecuencias = stof(aux);
+                break;
+            case 3:
+                tamanoNombreSecuencia.push_back(stoi(aux));
+                break;
+            case 4:
+                longitudSecuencia.push_back(stod(aux));
+                break;
+            case 5:
+                ultimoCaracterDelNombre.push_back(aux[0]);
+                break;
+            case 6:
+                cantidadCerosAgregados = stoi(aux);
+                break;
+            case 7:
+                binario.push_back(aux);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    archivo.close();
+    cout << "Cantidad de bases: " << cantidadBases << endl;
+    cout << "Bases: " << endl;
+    for (auto pair : bases)
+    {
+        cout << pair.first << " " << pair.second << endl;
+    }
+    cout << "Cantidad de secuencias: " << cantidadSecuencias << endl;
+    cout << "Tamano del nombre de la secuencia: " << endl;
+    for (int i = 0; i < tamanoNombreSecuencia.size(); i++)
+    {
+        cout << tamanoNombreSecuencia[i] << endl;
+    }
+    cout << "Longitud de la secuencia: " << endl;
+    for (int i = 0; i < longitudSecuencia.size(); i++)
+    {
+        cout << longitudSecuencia[i] << endl;
+    }
+    cout << "Ultimo caracter del nombre: " << endl;
+    for (int i = 0; i < ultimoCaracterDelNombre.size(); i++)
+    {
+        cout << ultimoCaracterDelNombre[i] << endl;
+    }
+    cout << "Cantidad de ceros agregados: " << cantidadCerosAgregados << endl;
+    
+    
+    cout << "Binario: " << endl;
+    string num;
+    vector<string> binario2;
+    for (int i = 0; i < binario.size(); i++)
+    {
+        // convertir numero decimal a binario
+        num = binario[i];
+        bitset<8> binario(stoi(num));
+        //cout << binario<< endl;
+        binario2.push_back(binario.to_string());
+    }
+    
+    for (int i = 0; i < binario2.size(); i++)
+    {
+        cout << binario2[i] << endl;
+    }
+    string archivoEnBinario;
+    cout << endl<< endl;
+    cout << "Archivo en binario: " << endl;
+    
+    for (int i = 0; i < binario2.size(); i++)
+    {
+        archivoEnBinario += binario2[i];
+    }
+
+    // eliminar los ceros agregados del final del string 
+    if (cantidadCerosAgregados != 0)
+    {
+        archivoEnBinario = archivoEnBinario.substr(0, archivoEnBinario.size() - cantidadCerosAgregados);
+    }
+    
+
+    cout << archivoEnBinario << endl;
+
+    // decodificar el archivo
+    cout << endl << endl;
+    cout << "Decodificacion de huffman: " << endl;
+    decodificarHuffman(archivoEnBinario);
+    
     
 
 }
