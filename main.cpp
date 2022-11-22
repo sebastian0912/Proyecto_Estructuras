@@ -202,8 +202,8 @@ int main()
                 cout << "ruta_mas_corta descripcion_secuencia i j x y" << endl;
             }
             else if (comandos.size() == 6)
-            {
-                cout << "Ruta mas corta realizado" << endl;
+            {  
+                rutaMasCorta (comandos[1], atof(comandos[2].c_str()), atof(comandos[3].c_str()), atof(comandos[4].c_str()), atof(comandos[5].c_str()), lista_secuencias);
             }
         }
 
@@ -216,7 +216,7 @@ int main()
             }
             else if (comandos.size() == 4)
             {
-                cout << "Base remota realizado" << endl;
+                BaseRemota(comandos[1], atof(comandos[2].c_str()), atof(comandos[3].c_str()), lista_secuencias);
             }
         }
 

@@ -367,6 +367,7 @@ void sacarCaracteres(string nombreArchivo)
         cout << "No se pudo abrir el archivo" << endl;
         exit(1);
     }
+    
     else
     {
         while (!archivo.eof())
@@ -670,14 +671,12 @@ void codificacion(string nombreArchivo, list<Secuencia> &lista)
         cadena = cod.getBinario()[i];
         bitset<8> binario(cadena);
         archivoCod << binario.to_ulong() << endl;
-
     }
     archivoCod<< ",";
     cout << "Archivo cod creado" << endl;
     archivoCod.close();   
     
 }
-
 
 void decodificar(string nombreArchivo)
 {
@@ -801,8 +800,231 @@ void decodificar(string nombreArchivo)
     // decodificar el archivo
     cout << endl << endl;
     cout << "Decodificacion de huffman: " << endl;
-    decodificarHuffman(archivoEnBinario);
-    
-    
+    decodificarHuffman(archivoEnBinario);  
+}
 
+void rutaMasCorta(string nombre_secuencia, int i, int j, int x, int y, list<Secuencia> &lista ){
+    cout << "Ruta mas corta: " << endl;
+    list<Secuencia>::iterator it;
+    char matriz [MAX_LENGHT][MAX_LENGHT] = {' '};
+    int filas, columnas;
+    
+    for (it = lista.begin(); it != lista.end(); it++)
+    {
+        if (strstr(it->getNombre_sec().c_str(), nombre_secuencia.c_str()))        
+        {
+            columnas = it->getTamano();
+            filas =  it->getSecuencia().size() / columnas;
+            //llenar matriz con la secuencia
+            for (int i = 0; i < filas+1; i++)
+            {
+                for (int j = 0; j < columnas; j++)
+                {
+                    matriz[i][j] = it->getSecuencia()[i * columnas + j];                                        
+                }
+            }
+        }       
+    }
+    cout << "Columnas: " << columnas << endl;
+    cout << "Filas: " << filas << endl;
+    cout << "Matriz: " << endl;
+
+    vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};    
+
+    //imprimir matriz
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            cout << matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+    Grafo<pair <int, int> , float> grafo(true, true);
+    pair <int, int> aux;
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            if(matriz[i][j] != ' '){
+                aux.first = i;
+                aux.second = j;
+                grafo.agregarVertice(aux);
+            }          
+        }
+    }
+
+    pair <int, int> vecino;
+    float peso;
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            if(matriz[i][j] != ' '){
+                aux.first = i;
+                aux.second = j;
+                //Vecino de arriba
+                if(i > 0){
+                    vecino.first = i-1;
+                    vecino.second = j;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i-1][j])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de abajo
+                if(i < filas+1){
+                    vecino.first = i+1;
+                    vecino.second = j;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i+1][j])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de derecha
+                if(j < columnas-1){
+                    vecino.first = i;
+                    vecino.second = j+1;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i][j+1])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de izquierda
+                if(j > 0){
+                    vecino.first = i;
+                    vecino.second = j-1;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i][j-1])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }                
+            }          
+        }
+    }
+    vector<vector<pair<int, int>>> rutas;
+    float * costos = grafo.Dijkstra(grafo.verticeToIndice(make_pair(i, j)), rutas );
+
+    int indiceDestino = grafo.verticeToIndice(make_pair(x, y));
+
+    cout << "Costo: " << endl;
+    cout<< costos[indiceDestino] << endl;
+
+    cout << "Ruta: " << endl;
+    for (int i = 0; i < rutas[indiceDestino].size(); i++)
+    {
+        cout << matriz[rutas[indiceDestino][i].first][rutas[indiceDestino][i].second];
+    }
+    cout << endl;    
+}
+
+void BaseRemota(string nombre_secuencia, int i, int j, list<Secuencia> &lista ){
+        cout << "Ruta mas corta: " << endl;
+    list<Secuencia>::iterator it;
+    char matriz [MAX_LENGHT][MAX_LENGHT] = {' '};
+    int filas, columnas;
+    
+    for (it = lista.begin(); it != lista.end(); it++)
+    {
+        if (strstr(it->getNombre_sec().c_str(), nombre_secuencia.c_str()))        
+        {
+            columnas = it->getTamano();
+            filas =  it->getSecuencia().size() / columnas;
+            //llenar matriz con la secuencia
+            for (int i = 0; i < filas+1; i++)
+            {
+                for (int j = 0; j < columnas; j++)
+                {
+                    matriz[i][j] = it->getSecuencia()[i * columnas + j];                                        
+                }
+            }
+        }       
+    }
+    cout << "Columnas: " << columnas << endl;
+    cout << "Filas: " << filas << endl;
+    cout << "Matriz: " << endl;
+
+    vector<char> codigos = {'A', 'C', 'G', 'T', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', 'X', '-'};    
+
+    //imprimir matriz
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            cout << matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+    Grafo<pair <int, int> , float> grafo(true, true);
+    pair <int, int> aux;
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            if(matriz[i][j] != ' '){
+                aux.first = i;
+                aux.second = j;
+                grafo.agregarVertice(aux);
+            }          
+        }
+    }
+
+    pair <int, int> vecino;
+    float peso;
+    for (int i = 0; i < filas+1; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            if(matriz[i][j] != ' '){
+                aux.first = i;
+                aux.second = j;
+                //Vecino de arriba
+                if(i > 0){
+                    vecino.first = i-1;
+                    vecino.second = j;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i-1][j])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de abajo
+                if(i < filas+1){
+                    vecino.first = i+1;
+                    vecino.second = j;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i+1][j])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de derecha
+                if(j < columnas-1){
+                    vecino.first = i;
+                    vecino.second = j+1;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i][j+1])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }
+                //Vecino de izquierda
+                if(j > 0){
+                    vecino.first = i;
+                    vecino.second = j-1;
+                    peso = 1 / (1 + abs(static_cast<float>(matriz[i][j]) - static_cast<float>(matriz[i][j-1])));
+                    grafo.agregarArista(aux, vecino, peso);
+                }                
+            }          
+        }
+    }
+    //vector<vector<pair<int, int>>> rutas;
+    vector<vector<pair<int, int>>> rutasM;
+    //float * costos = grafo.Dijkstra(grafo.verticeToIndice(make_pair(i, j)), rutas );
+    float * costoM = grafo.DijkstraInv(grafo.verticeToIndice(make_pair(i, j)), rutasM );
+
+    //int indiceDestino = grafo.verticeToIndice(make_pair(x, y));
+    int indiceMaximo = -1;
+    float max = -1;
+    for(int k = 0 ; k < grafo.ordenGrafo() ; k++){
+        if(matriz[grafo.getValorVertice(k).first][grafo.getValorVertice(k).second] == matriz[i][j]){
+            if(costoM[k] > max){
+                indiceMaximo = k;
+                max = costoM[k];
+            }
+        }
+    }
+
+    cout << "Costo base remota:" << costoM[indiceMaximo] << endl;
+    cout << "Ruta:" << endl;
+    for (int i = 0; i < rutasM[indiceMaximo].size(); i++)
+    {
+        cout << matriz[rutasM[indiceMaximo][i].first][rutasM[indiceMaximo][i].second];
+    }
+
+    
+    cout << endl;
 }

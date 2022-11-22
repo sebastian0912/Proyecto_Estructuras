@@ -48,12 +48,15 @@ public:
     bool isLeaf(NodeHuffmanTree *root);
     void encode(NodeHuffmanTree* root, string str, unordered_map<char, string> &huffmanCode);
     unordered_map<char, string> buildHuffmanTree( priority_queue<Caracteres> cac);
-
+    void decode(NodeHuffmanTree *root, int &index, string str);
+    void decodificarHuffman(string str);
+    
 private:
     char ch;
     int freq;
     NodeHuffmanTree *left, *right;
 };
+
 bool operator<(const NodeHuffmanTree &c1, const NodeHuffmanTree &c2)
 {
     NodeHuffmanTree aux1, aux2;

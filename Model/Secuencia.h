@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <iostream>
+#include "Grafo.h"
+
 using namespace std;
 
 class Secuencia
@@ -18,7 +20,6 @@ public:
     void listarSecuenciaw(vector<char> cod, int &aux);
     void listarSecuencias(list<Secuencia> lista);
 
-    
     string getNombre_sec()
     {
         return nombre_sec;

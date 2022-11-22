@@ -154,7 +154,6 @@ void decodificarHuffman(string str)
         // Special case: For input like a, aa, aaa, etc.
         while (freq--)
         {
-
             cout << root->getCh();
         }
     }
